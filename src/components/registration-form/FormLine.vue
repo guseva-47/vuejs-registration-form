@@ -1,29 +1,49 @@
 <template>
   <div class="form-line">
-    <label :for="inputId" class="form-line__label label">{{
-      inputLabel
+    <label :for="params.id" class="form-line__label label">{{
+      params.label
     }}</label>
     <input
-      :type="inputType"
-      :id="inputId"
+      :type="params.type"
+      :id="params.id"
       class="form-line__input input"
-      :name="inputId"
-      :placeholder="inputPlaceholder"
-      v-model="inputValue"
+      :name="params.id"
+      :placeholder="params.placeholder"
+      :value="value"
+      @input="$emit('update:value', $event.target.value)"
     />
-    <div class="error-message" v-if="inputId=='reg-name'" >{{ errorMessage }}</div>
+    <div class="error-message" v-if="!params.isValid">
+      {{ errorMessage }}
+    </div>
   </div>
 </template>
 
 <script>
+// import { computed } from "@vue/reactivity";
 export default {
   name: "FormLine",
   props: {
-    inputId: String,
-    inputLabel: String,
-    inputType: String,
-    inputPlaceholder: String,
+    params: {
+      type: Object,
+      required: true,
+      default() {
+        return { id: String, label: String, type: String, placeholder: String, isValid: Boolean };
+      },
+    },
+    value: {
+      type: String,
+      required: true,
+    },
   },
+  emits: ["update:value"],
+  // TODO можно ли использовать??
+  // setup: (props, { emit }) => {
+  //   const val = computed({
+  //     get: () => props.value ?? "",
+  //     set: (value) => emit("update:value", value),
+  //   });
+  //   return { val };
+  // },
   data() {
     return {
       inputValue: "",

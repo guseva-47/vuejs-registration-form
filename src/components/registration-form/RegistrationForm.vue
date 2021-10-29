@@ -15,35 +15,27 @@
         method="post"
         autocomplete="on"
       >
-        <!-- TODO v-for для полей -->
         <div class="registration-body__input">
-          <FormLine
-            inputId="reg-name"
-            inputLabel="Имя"
-            inputType="text"
-            inputPlaceholder="Введите Ваше имя"
-          />
+          <form-line :params="inputParams.name" v-model:value="data.name" />
         </div>
         <div class="registration-body__input">
-          <FormLine
-            inputId="reg-email"
-            inputLabel="Email"
-            inputType="email"
-            inputPlaceholder="Введите ваш email"
-          />
+          <form-line :params="inputParams.email" v-model:value="data.email" />
         </div>
         <div class="registration-body__input">
-          <FormLine
-            inputId="reg-number"
-            inputLabel="Номер телефона"
-            inputType="tel"
-            inputPlaceholder="Введите номер телефона"
-          />
+          <form-line :params="inputParams.phone" v-model:value="data.phone" />
         </div>
+
         <!-- TODO вынести -->
         <div class="registration-body__select">
-          <label :for="selectId" class="registration-body__label label">Язык</label>
-          <select class="select" v-model="language" :placeholder="Язык" :id="selectId">
+          <label :for="selectId" class="registration-body__label label"
+            >Язык</label
+          >
+          <select
+            class="select"
+            v-model="data.language"
+            placeholder="Язык"
+            :id="selectId"
+          >
             <option disabled value="">Язык</option>
             <option>А пррп прдад оридлоидоидл ридлоидлои доидлоидли</option>
             <option>Б</option>
@@ -56,7 +48,7 @@
             <input
               class="accept-line__checkbox checkbox"
               type="checkbox"
-              v-model="toggle"
+              v-model="data.isAcceptRules"
             />
             Принимаю
             <a href="#" class="accept-line__link link">условия</a> использования
@@ -84,9 +76,76 @@ export default {
   },
   data() {
     return {
-      language: "",
-      toggle: false,
+      selectId: "selectId1",
+
+      data: {
+        name: "",
+        email: "",
+        phone: "",
+        language: "",
+        isAcceptRules: true,
+      },
+      inputParams: {
+        name: {},
+        email: {},
+        phone: {},
+      },
     };
+  },
+  created() {
+    this.inputParams.name = this.initParams(
+      "reg-name",
+      "Имя",
+      "text",
+      "Введите Ваше имя"
+    );
+    this.inputParams.email = this.initParams(
+      "reg-email",
+      "Email",
+      "email",
+      "Введите ваш email"
+    );
+    this.inputParams.phone = this.initParams(
+      "reg-number",
+      "Номер телефона",
+      "tel",
+      "Введите номер телефона"
+    );
+  },
+  computed: {
+    // - поле “Имя” не может содержать цифры и символы кроме пробела и дефиса
+    nameIsValid() {
+      const myRe = /^([a-zа-яё]+)((\s?|-?)[a-zа-яё]+)*$/i;
+      return myRe.test(this.data.name);
+    },
+
+    // - в поле “email” можно отправить только email.
+    emailIsValid() {
+      const myRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return myRe.test(this.data.email);
+    },
+
+    // - в поле “номер телефона” можно ввести только 11 цифр, круглые скобки, дефис и знак плюс.
+    phoneIsValid() {
+      const validSymbols = /^([-()+\d])+$/;
+      if(!validSymbols.test(this.data.phone)) return false;
+      
+      const numbers = this.data.phone.split('').filter(n => Number.isInteger(Number(n)))
+      
+      const DIGIT_COUNT = 11;
+      return DIGIT_COUNT === numbers.length;
+    }
+  },
+  methods: {
+    initParams(id, label, type, placeholder, isValid = true) {
+      return {
+        id: id ?? `${new Date(0)}`,
+        label: label ?? "",
+        type: type ?? "text",
+        placeholder: placeholder ?? "",
+        isValid: isValid ?? true,
+      };
+    },
   },
 };
 </script>
@@ -255,7 +314,9 @@ export default {
   box-shadow: 0px 4px 8px rgba(44, 39, 56, 0.04);
   border-radius: 4px;
 
-  background-image: url("C:/Users/gusev/Documents/program/hello-work/amigoweb-registration-form/src/assets/Check.svg");
+  /* TODO в chrome и opera картинка фона выглядит странно */
+  background: url("C:/Users/gusev/Documents/program/hello-work/amigoweb-registration-form/src/assets/Check.svg");
+  background-repeat: no-repeat;
   background-size: 24px;
 }
 .checkbox:disabled {
@@ -321,6 +382,7 @@ export default {
   box-shadow: 0px 4px 8px rgba(44, 39, 56, 0.04);
   border-radius: 6px;
 
+  /* TODO в chrome и opera картинка фона выглядит странно */
   background-image: url("C:/Users/gusev/Documents/program/hello-work/amigoweb-registration-form/src/assets/Chevron Bottom.svg");
   background-size: 30px;
   background-repeat: no-repeat, repeat;

@@ -4,9 +4,7 @@
       Только у выподающего списка нет тени, среди всех инпутов
  -->
   <div class="wrapper">
-    <div class="_container">
-      <RegistrationForm />
-    </div>
+    <RegistrationForm />
   </div>
 </template>
 
@@ -106,8 +104,5 @@ h6 {
 .wrapper {
   min-height: 100%;
   overflow: hidden;
-}
-
-._container {
 }
 </style>
