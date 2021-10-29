@@ -9,8 +9,7 @@
       class="form-line__input input"
       :name="params.id"
       :placeholder="params.placeholder"
-      :value="value"
-      @input="$emit('update:value', $event.target.value)"
+      v-model="val"
     />
     <div class="error-message" v-if="!params.isValid">
       {{ errorMessage }}
@@ -19,7 +18,7 @@
 </template>
 
 <script>
-// import { computed } from "@vue/reactivity";
+import { computed } from "@vue/reactivity";
 export default {
   name: "FormLine",
   props: {
@@ -27,28 +26,26 @@ export default {
       type: Object,
       required: true,
       default() {
-        return { id: String, label: String, type: String, placeholder: String, isValid: Boolean };
+        return {
+          id: String,
+          label: String,
+          type: String,
+          placeholder: String,
+          isValid: Boolean,
+        };
       },
     },
-    value: {
-      type: String,
-      required: true,
-    },
+    value: { type: String, required: true },
   },
-  emits: ["update:value"],
-  // TODO можно ли использовать??
-  // setup: (props, { emit }) => {
-  //   const val = computed({
-  //     get: () => props.value ?? "",
-  //     set: (value) => emit("update:value", value),
-  //   });
-  //   return { val };
-  // },
-  data() {
-    return {
-      inputValue: "",
-      errorMessage: "Введено некорректное значение",
-    };
+  setup: (props, { emit }) => {
+    const val = computed({
+      get: () => props.value ?? "",
+      set: (value) => emit("update:value", value),
+    });
+
+    const errorMessage = "Введено некорректное значение";
+
+    return { val, errorMessage };
   },
 };
 </script>

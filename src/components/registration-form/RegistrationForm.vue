@@ -16,13 +16,25 @@
         autocomplete="on"
       >
         <div class="registration-body__input">
-          <form-line :params="inputParams.name" v-model:value="data.name" />
+          <form-line
+            :params="inputParams.name"
+            :value="data.name"
+            @update:value="updateName"
+          />
         </div>
         <div class="registration-body__input">
-          <form-line :params="inputParams.email" v-model:value="data.email" />
+          <form-line
+            :params="inputParams.email"
+            :value="data.email"
+            @update:value="updateEmail"
+          />
         </div>
         <div class="registration-body__input">
-          <form-line :params="inputParams.phone" v-model:value="data.phone" />
+          <form-line
+            :params="inputParams.phone"
+            :value="data.phone"
+            @update:value="updatePhone"
+          />
         </div>
 
         <!-- TODO вынести -->
@@ -57,7 +69,12 @@
 
         <!-- TODO вынести -->
         <div class="registration-button">
-          <button class="button" type="button" :disabled="true">
+          <button
+            class="button"
+            type="button"
+            :disabled="!isInputCompleted"
+            @click="registrationRequest"
+          >
             Зарегистрироваться
           </button>
         </div>
@@ -83,7 +100,7 @@ export default {
         email: "",
         phone: "",
         language: "",
-        isAcceptRules: true,
+        isAcceptRules: false,
       },
       inputParams: {
         name: {},
@@ -128,13 +145,28 @@ export default {
     // - в поле “номер телефона” можно ввести только 11 цифр, круглые скобки, дефис и знак плюс.
     phoneIsValid() {
       const validSymbols = /^([-()+\d])+$/;
-      if(!validSymbols.test(this.data.phone)) return false;
-      
-      const numbers = this.data.phone.split('').filter(n => Number.isInteger(Number(n)))
-      
+      if (!validSymbols.test(this.data.phone)) return false;
+
+      const numbers = this.data.phone
+        .split("")
+        .filter((n) => Number.isInteger(Number(n)));
+
       const DIGIT_COUNT = 11;
       return DIGIT_COUNT === numbers.length;
-    }
+    },
+
+    isInputCompleted() {
+      let isComleted =
+        Object.values(this.data).findIndex((inpData) => !inpData) === -1;
+
+      isComleted =
+        isComleted &&
+        this.nameIsValid &&
+        this.emailIsValid &&
+        this.phoneIsValid;
+
+      return isComleted;
+    },
   },
   methods: {
     initParams(id, label, type, placeholder, isValid = true) {
@@ -146,6 +178,42 @@ export default {
         isValid: isValid ?? true,
       };
     },
+
+    updateName(value) {
+      this.data.name = value;
+      this.inputParams.name.isValid = this.nameIsValid;
+    },
+
+    updateEmail(email) {
+      this.data.email = email;
+      this.inputParams.email.isValid = this.emailIsValid;
+    },
+
+    updatePhone(phone) {
+      this.data.phone = phone;
+      this.inputParams.phone.isValid = this.phoneIsValid;
+    },
+
+    async registrationRequest() {
+      if (!this.isInputCompleted) {
+        console.log("Some entered data are not valid.");
+        return;
+      }
+
+      const data = {
+        name: this.data.name,
+        email: this.data.email,
+        phone: this.data.phone,
+        language: this.data.language,
+        isAcceptRules: this.data.isAcceptRules,
+      };
+
+      data.phone = this.data.phone
+        .split("")
+        .filter((n) => Number.isInteger(Number(n)));
+
+      console.log(data);
+    },
   },
 };
 </script>
@@ -153,7 +221,7 @@ export default {
 <style>
 @import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;700&display=swap");
 
-/* 
+/*
   TODO
   отдельный класс для инпута
     класс для чекбокса
@@ -415,12 +483,12 @@ export default {
   padding: 14px 14px 13px 14px;
   box-shadow: 0px 4px 8px rgba(44, 39, 56, 0.04);
 }
-*[dir="rtl"] .select,
+/* *[dir="rtl"] .select,
 :root:lang(ar) .select,
 :root:lang(iw) .select {
   background-position: left 0.7em top 50%, 0 0;
   padding: 0.6em 0.8em 0.5em 1.4em;
-}
+} */
 /* ---------------- */
 /* ---- Label ---- */
 .label {
@@ -433,5 +501,6 @@ export default {
 
   color: #756f86;
 }
-/* --------------- */
+
+
 </style>
