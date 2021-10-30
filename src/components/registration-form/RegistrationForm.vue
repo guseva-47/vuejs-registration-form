@@ -15,6 +15,14 @@
         method="post"
         autocomplete="on"
       >
+        <div class="registration-body__select">
+          <label :for="selectId" class="registration-body__label label">
+            Яlallala lla
+          </label>
+          <v-select :options="options" @option="OnSelect" placeholder="Язык" />
+          {{ selectedOption }}
+        </div>
+
         <div class="registration-body__input">
           <form-line
             :params="inputParams.name"
@@ -85,11 +93,13 @@
 
 <script>
 import FormLine from "./FormLine.vue";
+import VSelect from "./VSelect.vue";
 
 export default {
   name: "RegistrationForm",
   components: {
     FormLine,
+    VSelect,
   },
   data() {
     return {
@@ -107,6 +117,15 @@ export default {
         email: {},
         phone: {},
       },
+
+      options: [
+        { name: "First Option", val: 1 },
+        { name: "Second Option", val: 2 },
+        { name: "Third Option", val: 3 },
+        { name: "Lorem ipsum", val: 4 },
+      ],
+
+      selectedOption: {},
     };
   },
   created() {
@@ -169,6 +188,9 @@ export default {
     },
   },
   methods: {
+    OnSelect(option) {
+      this.selectedOption = option;
+    },
     initParams(id, label, type, placeholder, isValid = true) {
       return {
         id: id ?? `${new Date(0)}`,
@@ -383,7 +405,7 @@ export default {
   border-radius: 4px;
 
   /* TODO в chrome и opera картинка фона выглядит странно */
-  background: url("C:/Users/gusev/Documents/program/hello-work/amigoweb-registration-form/src/assets/Check.svg");
+  background: url("/Check.svg");
   background-repeat: no-repeat;
   background-size: 24px;
 }
@@ -451,10 +473,11 @@ export default {
   border-radius: 6px;
 
   /* TODO в chrome и opera картинка фона выглядит странно */
-  background-image: url("C:/Users/gusev/Documents/program/hello-work/amigoweb-registration-form/src/assets/Chevron Bottom.svg");
-  background-size: 30px;
+  background-image: url("/Chevron Bottom.svg");
+
   background-repeat: no-repeat, repeat;
   background-position: right 11px center;
+  background-size: 40px;
 
   -moz-appearance: none;
   -webkit-appearance: none;
@@ -490,6 +513,7 @@ export default {
   padding: 0.6em 0.8em 0.5em 1.4em;
 } */
 /* ---------------- */
+
 /* ---- Label ---- */
 .label {
   font-family: IBM Plex Sans;
@@ -501,6 +525,4 @@ export default {
 
   color: #756f86;
 }
-
-
 </style>
