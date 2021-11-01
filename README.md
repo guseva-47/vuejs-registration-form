@@ -1,24 +1,15 @@
-# amigoweb-registration-form
+# Форма регистрации VueJS
 
 ## Project setup
 ```
 yarn install
 ```
-
 ### Compiles and hot-reloads for development
 ```
 yarn serve
 ```
 
-### Compiles and minifies for production
-```
-yarn build
-```
+### Описание
+Форма для ввода данных при регистрации.
 
-### Lints and fixes files
-```
-yarn lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+Для dev запуска предварительная конфигурация не требуется.
