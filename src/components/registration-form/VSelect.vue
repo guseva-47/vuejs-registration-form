@@ -85,6 +85,7 @@ export default {
   display: inline-block;
   position: relative;
 }
+
 .v-select__input {
   display: block;
   width: 100%;
@@ -112,6 +113,7 @@ export default {
 
   cursor: pointer;
 }
+
 .v-select__ul {
   list-style: none;
   position: absolute;
@@ -131,6 +133,7 @@ export default {
   overflow: auto;
   z-index: 20;
 }
+
 .v-select__li {
   cursor: pointer;
 
@@ -144,12 +147,15 @@ export default {
 
   color: #756f86;
 }
+
 .v-select__li_selected {
   color: #2c2738;
 }
+
 .v-select__li:hover {
   background: #ebf4f8;
 }
+
 .v-select__input:hover,
 .v-select__input:focus {
   border: 2px solid #0880ae;

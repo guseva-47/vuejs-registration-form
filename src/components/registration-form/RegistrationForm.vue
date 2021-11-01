@@ -8,73 +8,66 @@
         >
       </h2>
     </div>
-    <div class="registration-body">
-      <form
-        class="registration-body__form form"
-        action="#"
-        method="post"
-        autocomplete="on"
-      >
-        <div class="registration-body__input form__elem">
-          <form-line
-            :params="inputParams.name"
-            :value="data.name"
-            @update:value="updateName"
-          />
-        </div>
-        <div class="registration-body__input form__elem">
-          <form-line
-            :params="inputParams.email"
-            :value="data.email"
-            @update:value="updateEmail"
-            @forBlur="onEmailBlur"
-          />
-        </div>
-        <div class="registration-body__input form__elem">
-          <form-line
-            :params="inputParams.phone"
-            :value="data.phone"
-            @update:value="updatePhone"
-            @forBlur="onPhoneBlur"
-          />
-        </div>
+    <form class="registration-body" action="#" method="post" autocomplete="on">
+      <div class="registration-body__line">
+        <form-line
+          :params="inputParams.name"
+          :value="data.name"
+          @update:value="updateName"
+        />
+      </div>
+      <div class="registration-body__line">
+        <form-line
+          :params="inputParams.email"
+          :value="data.email"
+          @update:value="updateEmail"
+          @forBlur="onEmailBlur"
+        />
+      </div>
+      <div class="registration-body__line">
+        <form-line
+          :params="inputParams.phone"
+          :value="data.phone"
+          @update:value="updatePhone"
+          @forBlur="onPhoneBlur"
+        />
+      </div>
 
-        <div class="registration-body__select form__elem">
-          <label :for="selectId" class="registration-body__label label">
-            Язык
-          </label>
-          <v-select
-            :options="languages"
-            @choose="onChooseLang"
-            placeholder="Язык"
-            :optionsMaxHeight="optionsMaxHeight"
+      <div class="registration-body__line registration-body__select">
+        <label :for="selectId" class="registration-body__label label">
+          Язык
+        </label>
+        <v-select
+          :options="languages"
+          @choose="onChooseLang"
+          placeholder="Язык"
+          :optionsMaxHeight="optionsMaxHeight"
+        />
+      </div>
+
+      <div class="registration-body__line registration-body__accept-rules">
+        <label class="label">
+          <input
+            class="checkbox"
+            type="checkbox"
+            v-model="data.isAcceptRules"
           />
-        </div>
+          Принимаю
+          <a href="#" class="link">условия</a> использования
+        </label>
+      </div>
 
-        <div class="accept-line registration-body__input form__elem">
-          <label class="accept-line__label label">
-            <input
-              class="accept-line__checkbox checkbox"
-              type="checkbox"
-              v-model="data.isAcceptRules"
-            />
-            Принимаю
-            <a href="#" class="accept-line__link link">условия</a> использования
-          </label>
-        </div>
-
-        <div class="registration-button form__elem">
-          <button
-            class="button"
-            type="button"
-            :disabled="!isInputCompleted"
-            @click="registrationRequest"
-          >
-            Зарегистрироваться
-          </button>
-        </div>
-      </form>
-    </div>
+      <div class="registration-body__line">
+        <button
+          class="button"
+          type="button"
+          :disabled="!isInputCompleted"
+          @click="registrationRequest"
+        >
+          Зарегистрироваться
+        </button>
+      </div>
+    </form>
   </div>
 </template>
 
@@ -246,19 +239,8 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 @import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;700&display=swap");
-
-.title {
-  font-style: normal;
-  font-weight: bold;
-  font-size: 34px;
-  line-height: 44px;
-}
-
-.link {
-  color: #0880ae;
-}
 
 .registration {
   font-family: "IBM Plex Sans", sans-serif;
@@ -278,6 +260,10 @@ export default {
   flex-direction: column;
 }
 
+.registration-body__line + .registration-body__line {
+  margin-top: 8px;
+}
+
 .registration-header {
   padding-bottom: 54px;
 }
@@ -295,10 +281,6 @@ export default {
   margin-left: 6px;
 }
 
-.form__elem + .form__elem {
-  margin-top: 8px;
-}
-
 .registration-body__select {
   display: flex;
   flex-direction: column;
@@ -308,150 +290,10 @@ export default {
 .registration-body__label {
   margin: 0 0 8px 0;
 }
-.registration-button {
-  display: block;
-}
 
-.accept-line {
+.registration-body__accept-rules {
   display: block;
   line-height: 28px;
   margin-bottom: 37px;
-}
-
-/* ---- Button ---- */
-.button {
-  background: #0880ae;
-  box-shadow: 0px 2px 4px rgba(44, 39, 56, 0.08),
-    0px 4px 8px rgba(44, 39, 56, 0.08);
-  border-radius: 6px;
-
-  font-style: normal;
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 21px;
-  /* identical to box height */
-
-  text-align: center;
-
-  color: #ebf4f8;
-
-  width: 100%;
-  padding: 18px 0 17px 0;
-}
-.button:hover {
-  background: #0880ae;
-}
-.button:active {
-  border: 2px solid rgba(106, 100, 119, 0.86);
-  box-sizing: border-box;
-  box-shadow: 0px 2px 4px rgba(44, 39, 56, 0.0001),
-    0px 4px 8px rgba(44, 39, 56, 0.08);
-  border-radius: 6px;
-  padding: 16px 0 15px 0;
-}
-.button:disabled {
-  background: #dbe2ea;
-  box-shadow: 0px 4px 8px rgba(44, 39, 56, 0.08);
-  border-radius: 6px;
-
-  color: #2c2738;
-
-  mix-blend-mode: normal;
-  opacity: 0.5;
-}
-/* ----------------- */
-
-/* ---- Checkbox ---- */
-.checkbox {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  display: inline-block;
-  width: 28px;
-  height: 28px;
-  padding: 0;
-  vertical-align: top;
-  outline: none;
-  cursor: pointer;
-
-  background: #ffffff;
-  border: 1px solid #dbe2ea;
-  box-sizing: border-box;
-  box-shadow: 0px 4px 8px rgba(44, 39, 56, 0.04);
-  border-radius: 4px;
-}
-.checkbox:checked {
-  background: #ffffff;
-  border: 2px solid #0880ae;
-  box-sizing: border-box;
-  box-shadow: 0px 4px 8px rgba(44, 39, 56, 0.04);
-  border-radius: 4px;
-
-  background: url("/check.svg");
-  background-repeat: no-repeat;
-  background-size: 24px;
-}
-.checkbox:disabled {
-  color: #666;
-  cursor: default;
-}
-.checkbox:disabled {
-  filter: grayscale(100%);
-  opacity: 0.6;
-}
-/* .checkbox:focus {
-  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-} */
-
-/* .checkbox:hover {
-  filter: brightness(110%);
-} */
-
-/* .checkbox:active {
-  filter: brightness(80%);
-} */
-/* ------------------- */
-
-/* ---- Input ---- */
-.input {
-  display: block;
-  background: #ffffff;
-  border: 1px solid #dbe2ea;
-  box-sizing: border-box;
-  box-shadow: 0px 4px 8px rgba(44, 39, 56, 0.04);
-  border-radius: 6px;
-
-  padding: 15px 15px 14px 15px;
-
-  font-family: IBM Plex Sans;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 16px;
-  line-height: 21px;
-
-  color: #2c2738;
-
-  /* width: 100%; */
-}
-.input::placeholder {
-  font-family: IBM Plex Sans;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 16px;
-  line-height: 21px;
-
-  color: #7c9cbf;
-}
-/* --------------- */
-
-/* ---- Label ---- */
-.label {
-  font-family: IBM Plex Sans;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 21px;
-  height: 20px;
-
-  color: #756f86;
 }
 </style>

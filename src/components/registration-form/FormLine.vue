@@ -1,18 +1,20 @@
 <template>
   <div class="form-line">
-    <label :for="params.id" class="form-line__label label">{{
-      params.label
-    }}</label>
+    <label :for="params.id" class="form-line__line label">
+      {{ params.label }}
+    </label>
+
     <input
       :type="params.type"
       :id="params.id"
-      class="form-line__input input"
+      class="form-line__line input"
       :name="params.id"
       :placeholder="params.placeholder"
       v-model="val"
       @blur="onBlur"
     />
-    <div class="error-message" v-if="!params.isValid">
+
+    <div class="form-line__error-message" v-if="!params.isValid">
       {{ errorMessage }}
     </div>
   </div>
@@ -59,7 +61,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .form-line {
   display: flex;
   flex-direction: column;
@@ -68,15 +70,11 @@ export default {
   min-height: 106px;
 }
 
-.form-line__label {
+.form-line__line {
   margin: 0 0 8px 0;
 }
 
-.form-line__input {
-  margin: 0 0 8px 0;
-}
-
-.error-message {
+.form-line__error-message {
   font-family: IBM Plex Sans;
   font-style: normal;
   font-weight: normal;
