@@ -27,6 +27,7 @@
             :params="inputParams.email"
             :value="data.email"
             @update:value="updateEmail"
+            @forBlur="onEmailBlur"
           />
         </div>
         <div class="registration-body__input form__elem">
@@ -34,6 +35,7 @@
             :params="inputParams.phone"
             :value="data.phone"
             @update:value="updatePhone"
+            @forBlur="onPhoneBlur"
           />
         </div>
 
@@ -49,9 +51,7 @@
           />
         </div>
 
-        <div
-          class="accept-line registration-body__input form__elem"
-        >
+        <div class="accept-line registration-body__input form__elem">
           <label class="accept-line__label label">
             <input
               class="accept-line__checkbox checkbox"
@@ -114,6 +114,11 @@ export default {
         "Немецкий",
       ],
 
+      needValidCheck: {
+        email: false,
+        phone: false,
+      },
+
       optionsMaxHeight: 191,
     };
   },
@@ -146,12 +151,15 @@ export default {
 
     // - в поле “email” можно отправить только email.
     emailIsValid() {
+      if (!this.needValidCheck.email) return true;
+
       const myRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       return myRe.test(this.data.email);
     },
 
     // - в поле “номер телефона” можно ввести только 11 цифр, круглые скобки, дефис и знак плюс.
     phoneIsValid() {
+      if (!this.needValidCheck.phone) return true;
       const validSymbols = /^([-()+\d])+$/;
       if (!validSymbols.test(this.data.phone)) return false;
 
@@ -188,6 +196,15 @@ export default {
         placeholder: placeholder ?? "",
         isValid: isValid ?? true,
       };
+    },
+    onPhoneBlur(value) {
+      this.needValidCheck.phone = true;
+      this.updatePhone(value);
+    },
+
+    onEmailBlur(value) {
+      this.needValidCheck.email = true;
+      this.updateEmail(value);
     },
 
     updateName(value) {

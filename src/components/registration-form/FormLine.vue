@@ -10,6 +10,7 @@
       :name="params.id"
       :placeholder="params.placeholder"
       v-model="val"
+      @blur="onBlur"
     />
     <div class="error-message" v-if="!params.isValid">
       {{ errorMessage }}
@@ -37,15 +38,23 @@ export default {
     },
     value: { type: String, required: true },
   },
+  emits: {
+    "update:value": null,
+    forBlur: null,
+  },
   setup: (props, { emit }) => {
     const val = computed({
       get: () => props.value ?? "",
       set: (value) => emit("update:value", value),
     });
 
+    const onBlur = () => {
+      emit("forBlur", props.value);
+    };
+
     const errorMessage = "Введено некорректное значение";
 
-    return { val, errorMessage };
+    return { val, errorMessage, onBlur };
   },
 };
 </script>
