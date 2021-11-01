@@ -10,26 +10,26 @@
     </div>
     <div class="registration-body">
       <form
-        class="registration-body__form"
+        class="registration-body__form form"
         action="#"
         method="post"
         autocomplete="on"
       >
-        <div class="registration-body__input">
+        <div class="registration-body__input form__elem">
           <form-line
             :params="inputParams.name"
             :value="data.name"
             @update:value="updateName"
           />
         </div>
-        <div class="registration-body__input">
+        <div class="registration-body__input form__elem">
           <form-line
             :params="inputParams.email"
             :value="data.email"
             @update:value="updateEmail"
           />
         </div>
-        <div class="registration-body__input">
+        <div class="registration-body__input form__elem">
           <form-line
             :params="inputParams.phone"
             :value="data.phone"
@@ -37,7 +37,7 @@
           />
         </div>
 
-        <div class="registration-body__select">
+        <div class="registration-body__select form__elem">
           <label :for="selectId" class="registration-body__label label">
             Язык
           </label>
@@ -49,8 +49,9 @@
           />
         </div>
 
-        <!-- TODO вынести ????????????? -->
-        <div class="accept-line registration-body__input">
+        <div
+          class="accept-line registration-body__input form__elem"
+        >
           <label class="accept-line__label label">
             <input
               class="accept-line__checkbox checkbox"
@@ -62,8 +63,7 @@
           </label>
         </div>
 
-        <!-- TODO вынести -->
-        <div class="registration-button">
+        <div class="registration-button form__elem">
           <button
             class="button"
             type="button"
@@ -114,7 +114,7 @@ export default {
         "Немецкий",
       ],
 
-      optionsMaxHeight : 191,
+      optionsMaxHeight: 191,
     };
   },
   created() {
@@ -232,14 +232,6 @@ export default {
 <style>
 @import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;700&display=swap");
 
-/*
-  TODO
-  отдельный класс для инпута
-    класс для чекбокса
-    класс для лейбела
-    ?класс для лебел ссылки
-    класс для кнопки
- */
 .title {
   font-style: normal;
   font-weight: bold;
@@ -286,15 +278,7 @@ export default {
   margin-left: 6px;
 }
 
-.registration-body {
-}
-
-.registration-body__form {
-  /* display: flex;
-  flex-direction: column; */
-}
-
-.registration-body__input + .registration-body__input {
+.form__elem + .form__elem {
   margin-top: 8px;
 }
 
@@ -315,14 +299,6 @@ export default {
   display: block;
   line-height: 28px;
   margin-bottom: 37px;
-}
-
-.accept-line__label {
-  /* color: #756f86; */
-}
-
-.accept-line__link {
-  /* color: #0880ae; */
 }
 
 /* ---- Button ---- */
