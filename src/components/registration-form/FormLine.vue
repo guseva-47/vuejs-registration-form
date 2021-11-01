@@ -25,6 +25,8 @@ import { computed } from "@vue/reactivity";
 export default {
   name: "FormLine",
   props: {
+    value: { type: String, required: true },
+    errorMessageText: String,
     params: {
       type: Object,
       required: true,
@@ -38,7 +40,6 @@ export default {
         };
       },
     },
-    value: { type: String, required: true },
   },
   emits: {
     "update:value": null,
@@ -54,7 +55,7 @@ export default {
       emit("forBlur", props.value);
     };
 
-    const errorMessage = "Введено некорректное значение";
+    const errorMessage = props.errorMessageText ?? "Введено некорректное значение";
 
     return { val, errorMessage, onBlur };
   },

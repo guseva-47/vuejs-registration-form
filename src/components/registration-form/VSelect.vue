@@ -7,7 +7,7 @@
       readonly
       @click="toOpen"
     />
-    <ul class="v-select__ul" v-show="open" :style="cssR">
+    <ul class="v-select__ul" v-show="isOpen" :style="cssMaxHeight">
       <li
         class="v-select__li"
         v-for="(option, i) in options"
@@ -28,7 +28,7 @@ export default {
     options: {
       type: [Array, Object],
     },
-    selected: {},
+    selected: String,
     placeholder: String,
     optionsMaxHeight: Number,
   },
@@ -44,19 +44,20 @@ export default {
   data() {
     return {
       selectedOption: {},
-      open: false,
+      isOpen: false,
       selectedItem: null,
     };
   },
   created() {
     this.selectedOption = this.selected;
+    // прослушка кликов со всего окна, чтобы свернуть список, по клику в другое место
     document.body.addEventListener("click", this.close);
   },
   beforeUnmount() {
     document.body.removeEventListener("click", this.close);
   },
   computed: {
-    cssR() {
+    cssMaxHeight() {
       const MIN_HEIGHR = 72;
       return { "max-height": `${this.optionsMaxHeight ?? MIN_HEIGHR}px` };
     },
@@ -65,15 +66,18 @@ export default {
     updateOption(option, i) {
       this.selectedItem = i;
       this.selectedOption = option;
-      this.open = false;
+      this.isOpen = false;
 
       this.$emit("choose", option);
     },
+
     close(e) {
-      if (!this.$el.contains(e.target)) this.open = false;
+      // если клик не попал на текущий v-select, то сворачиваем select
+      if (!this.$el.contains(e.target)) this.isOpen = false;
     },
+
     toOpen() {
-      this.open = true;
+      this.isOpen = true;
     },
   },
 };

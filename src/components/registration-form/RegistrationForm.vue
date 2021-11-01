@@ -11,14 +11,14 @@
     <form class="registration-body" action="#" method="post" autocomplete="on">
       <div class="registration-body__line">
         <form-line
-          :params="inputParams.name"
+          :params="paramsOfInput.name"
           :value="data.name"
           @update:value="updateName"
         />
       </div>
       <div class="registration-body__line">
         <form-line
-          :params="inputParams.email"
+          :params="paramsOfInput.email"
           :value="data.email"
           @update:value="updateEmail"
           @forBlur="onEmailBlur"
@@ -26,7 +26,7 @@
       </div>
       <div class="registration-body__line">
         <form-line
-          :params="inputParams.phone"
+          :params="paramsOfInput.phone"
           :value="data.phone"
           @update:value="updatePhone"
           @forBlur="onPhoneBlur"
@@ -41,7 +41,7 @@
           :options="languages"
           @choose="onChooseLang"
           placeholder="Язык"
-          :optionsMaxHeight="optionsMaxHeight"
+          :optionsMaxHeight="selectOptionsMaxHeight"
         />
       </div>
 
@@ -92,7 +92,8 @@ export default {
         language: "",
         isAcceptRules: false,
       },
-      inputParams: {
+
+      paramsOfInput: {
         name: {},
         email: {},
         phone: {},
@@ -112,23 +113,23 @@ export default {
         phone: false,
       },
 
-      optionsMaxHeight: 191,
+      selectOptionsMaxHeight: 191,
     };
   },
   created() {
-    this.inputParams.name = this.initParams(
+    this.paramsOfInput.name = this.initParams(
       "reg-name",
       "Имя",
       "text",
       "Введите Ваше имя"
     );
-    this.inputParams.email = this.initParams(
+    this.paramsOfInput.email = this.initParams(
       "reg-email",
       "Email",
       "email",
       "Введите ваш email"
     );
-    this.inputParams.phone = this.initParams(
+    this.paramsOfInput.phone = this.initParams(
       "reg-number",
       "Номер телефона",
       "tel",
@@ -164,6 +165,7 @@ export default {
       return DIGIT_COUNT === numbers.length;
     },
 
+    // чек, что все поля заполнены, причем валидными данными
     isInputCompleted() {
       let isComleted =
         Object.values(this.data).findIndex((inpData) => !inpData) === -1;
@@ -178,9 +180,6 @@ export default {
     },
   },
   methods: {
-    onChooseLang(option) {
-      this.data.language = option;
-    },
     initParams(id, label, type, placeholder, isValid = true) {
       return {
         id: id ?? `${new Date(0)}`,
@@ -190,31 +189,43 @@ export default {
         isValid: isValid ?? true,
       };
     },
+
+    onChooseLang(option) {
+      this.data.language = option;
+    },
+
+    // обработка события "снятие фокуса из поля ввода form-line".
     onPhoneBlur(value) {
+      // считаем, что пользователь закончил ввод данных, 
+      //  значит пора начинать валидацию, она не будет раздражающе преждевременной
       this.needValidCheck.phone = true;
       this.updatePhone(value);
     },
 
+    // обработка события "снятие фокуса из поля ввода form-line".
     onEmailBlur(value) {
+      // считаем, что пользователь закончил ввод данных, 
+      //  значит пора начинать валидацию, она не будет раздражающе преждевременной
       this.needValidCheck.email = true;
       this.updateEmail(value);
     },
 
     updateName(value) {
       this.data.name = value;
-      this.inputParams.name.isValid = this.nameIsValid;
+      this.paramsOfInput.name.isValid = this.nameIsValid;
     },
 
     updateEmail(email) {
       this.data.email = email;
-      this.inputParams.email.isValid = this.emailIsValid;
+      this.paramsOfInput.email.isValid = this.emailIsValid;
     },
 
     updatePhone(phone) {
       this.data.phone = phone;
-      this.inputParams.phone.isValid = this.phoneIsValid;
+      this.paramsOfInput.phone.isValid = this.phoneIsValid;
     },
 
+    // заглушка для отправки данных формы
     async registrationRequest() {
       if (!this.isInputCompleted) {
         console.log("Some entered data are not valid.");

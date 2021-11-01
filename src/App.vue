@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <RegistrationForm />
+    <registration-form />
   </div>
 </template>
 
