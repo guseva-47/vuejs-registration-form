@@ -15,14 +15,6 @@
         method="post"
         autocomplete="on"
       >
-        <div class="registration-body__select">
-          <label :for="selectId" class="registration-body__label label">
-            Яlallala lla
-          </label>
-          <v-select :options="options" @option="OnSelect" placeholder="Язык" />
-          {{ selectedOption }}
-        </div>
-
         <div class="registration-body__input">
           <form-line
             :params="inputParams.name"
@@ -45,21 +37,16 @@
           />
         </div>
 
-        <!-- TODO вынести -->
         <div class="registration-body__select">
-          <label :for="selectId" class="registration-body__label label"
-            >Язык</label
-          >
-          <select
-            class="select"
-            v-model="data.language"
+          <label :for="selectId" class="registration-body__label label">
+            Язык
+          </label>
+          <v-select
+            :options="languages"
+            @choose="onChooseLang"
             placeholder="Язык"
-            :id="selectId"
-          >
-            <option disabled value="">Язык</option>
-            <option>А пррп прдад оридлоидоидл ридлоидлои доидлоидли</option>
-            <option>Б</option>
-          </select>
+            :optionsMaxHeight="optionsMaxHeight"
+          />
         </div>
 
         <!-- TODO вынести ????????????? -->
@@ -118,14 +105,16 @@ export default {
         phone: {},
       },
 
-      options: [
-        { name: "First Option", val: 1 },
-        { name: "Second Option", val: 2 },
-        { name: "Third Option", val: 3 },
-        { name: "Lorem ipsum", val: 4 },
+      languages: [
+        "Русский",
+        "Английский",
+        "Китайский",
+        "Испанский",
+        "Французский",
+        "Немецкий",
       ],
 
-      selectedOption: {},
+      optionsMaxHeight : 191,
     };
   },
   created() {
@@ -188,8 +177,8 @@ export default {
     },
   },
   methods: {
-    OnSelect(option) {
-      this.selectedOption = option;
+    onChooseLang(option) {
+      this.data.language = option;
     },
     initParams(id, label, type, placeholder, isValid = true) {
       return {
@@ -404,8 +393,7 @@ export default {
   box-shadow: 0px 4px 8px rgba(44, 39, 56, 0.04);
   border-radius: 4px;
 
-  /* TODO в chrome и opera картинка фона выглядит странно */
-  background: url("/Check.svg");
+  background: url("/check.svg");
   background-repeat: no-repeat;
   background-size: 24px;
 }
@@ -461,58 +449,6 @@ export default {
   color: #7c9cbf;
 }
 /* --------------- */
-
-/* ---- Select ---- */
-
-.select {
-  display: block;
-  background: #ffffff;
-  border: 1px solid #dbe2ea;
-  box-sizing: border-box;
-  box-shadow: 0px 4px 8px rgba(44, 39, 56, 0.04);
-  border-radius: 6px;
-
-  /* TODO в chrome и opera картинка фона выглядит странно */
-  background-image: url("/Chevron Bottom.svg");
-
-  background-repeat: no-repeat, repeat;
-  background-position: right 11px center;
-  background-size: 40px;
-
-  -moz-appearance: none;
-  -webkit-appearance: none;
-  appearance: none;
-
-  padding: 15px 15px 14px 15px;
-
-  font-family: IBM Plex Sans;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 16px;
-  line-height: 21px;
-
-  color: #2c2738;
-}
-.select::-ms-expand {
-  display: none;
-}
-.select:hover {
-  border: 2px solid #0880ae;
-  padding: 14px 14px 13px 14px;
-  box-shadow: 0px 4px 8px rgba(44, 39, 56, 0.04);
-}
-.select:focus {
-  border: 2px solid #0880ae;
-  padding: 14px 14px 13px 14px;
-  box-shadow: 0px 4px 8px rgba(44, 39, 56, 0.04);
-}
-/* *[dir="rtl"] .select,
-:root:lang(ar) .select,
-:root:lang(iw) .select {
-  background-position: left 0.7em top 50%, 0 0;
-  padding: 0.6em 0.8em 0.5em 1.4em;
-} */
-/* ---------------- */
 
 /* ---- Label ---- */
 .label {

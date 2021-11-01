@@ -1,22 +1,21 @@
 <template>
-<!-- todo сделать стрелочку, сделать сетап, разобраться с событиями -->
   <div class="v-select">
     <input
       class="v-select__input"
-      :value="!selectedOption ? '' : selectedOption.name"
+      :value="!selectedOption ? '' : selectedOption"
       :placeholder="placeholder"
       readonly
-      @click="open = true"
+      @click="toOpen"
     />
-    <ul class="v-select__ul" v-show="open">
+    <ul class="v-select__ul" v-show="open" :style="cssR">
       <li
         class="v-select__li"
         v-for="(option, i) in options"
-        :key="option.name"
+        :key="i"
         @click="updateOption(option, i)"
-        :class="{ selected: i == selectedItem }"
+        :class="{ 'v-select__li_selected': i == selectedItem }"
       >
-        {{ option.name }}
+        {{ option }}
       </li>
     </ul>
   </div>
@@ -31,6 +30,16 @@ export default {
     },
     selected: {},
     placeholder: String,
+    optionsMaxHeight: Number,
+  },
+  emits: {
+    choose: ({ option }) => {
+      if (!option) {
+        console.warn("Invalid payload for 'choose' event in v-select!");
+        return false;
+      }
+      return true;
+    },
   },
   data() {
     return {
@@ -46,16 +55,25 @@ export default {
   beforeUnmount() {
     document.body.removeEventListener("click", this.close);
   },
+  computed: {
+    cssR() {
+      const MIN_HEIGHR = 72;
+      return { "max-height": `${this.optionsMaxHeight ?? MIN_HEIGHR}px` };
+    },
+  },
   methods: {
     updateOption(option, i) {
       this.selectedItem = i;
       this.selectedOption = option;
       this.open = false;
-      this.$emit("option", option);
+
+      this.$emit("choose", option);
     },
     close(e) {
-      //console.log(this.$el);
       if (!this.$el.contains(e.target)) this.open = false;
+    },
+    toOpen() {
+      this.open = true;
     },
   },
 };
@@ -87,9 +105,11 @@ export default {
   font-size: 16px;
   line-height: 21px;
 
-  background: #ffffff url("/chevron-bottom.svg") 100% no-repeat;
-  background-position: right 11px center center;
+  background: #ffffff url("/chevron-down.svg") 100% no-repeat;
+  background-repeat: no-repeat, repeat;
+  background-position: right 11px center;
   background-size: 40px;
+
   cursor: pointer;
 }
 .v-select__ul {
@@ -106,6 +126,10 @@ export default {
 
   margin-top: 4px;
   width: 100%;
+  min-height: 64px;
+
+  overflow: auto;
+  z-index: 20;
 }
 .v-select__li {
   cursor: pointer;
@@ -120,7 +144,16 @@ export default {
 
   color: #756f86;
 }
+.v-select__li_selected {
+  color: #2c2738;
+}
 .v-select__li:hover {
   background: #ebf4f8;
+}
+.v-select__input:hover,
+.v-select__input:focus {
+  border: 2px solid #0880ae;
+  padding: 14px 14px 13px 14px;
+  box-shadow: 0px 4px 8px rgba(44, 39, 56, 0.04);
 }
 </style>
